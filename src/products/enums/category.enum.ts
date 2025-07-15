@@ -1,0 +1,13 @@
+// src/products/enums/category.enum.ts
+
+export enum CategoryType {
+  PHONE = 'PHONE',
+  WATCH = 'WATCH',
+  CAMERA = 'CAMERA',
+  HEADPHONE = 'HEADPHONE',
+  COMPUTER = 'COMPUTER',
+  GAMING_PLAYSTATION = 'GAMING_PLAYSTATION',
+  GAMING_SWITCH = 'GAMING_SWITCH',
+  GAMING_XBOX = 'GAMING_XBOX',
+  GAMING_PC = 'GAMING_PC',
+}
