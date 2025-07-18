@@ -2,21 +2,24 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './entity/order.entity';
-import { UsersService } from '../users/user.service';
 import { ProductService } from '../products/products.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { User } from '../auth/entity/user.entity';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
-    private readonly usersService: UsersService,
+
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
+
     private readonly productsService: ProductService,
   ) {}
 
-  async createOrder(userId: number, dto: CreateOrderDto) {
-    const user = await this.usersService.findById(userId);
+  async createOrder(userId: string, dto: CreateOrderDto) {
+    const user = await this.userRepo.findOne({ where:{ id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
     const products = await Promise.all(
@@ -51,12 +54,12 @@ export class OrdersService {
     return order;
   }
 
-  async getUserOrders(userId: number) {
-    const user = await this.usersService.findById(userId);
+  async getUserOrders(userId: string) {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
     return this.orderRepo.find({
-      where: { user: { id: String(userId) } },
+      where: { user: { id: userId } },
       relations: ['products'],
     });
   }

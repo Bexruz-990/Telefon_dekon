@@ -6,29 +6,27 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/user.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { EmailService } from './email/email.service';
-import { User } from '../users/entity/user.entity';
+import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
 
+const pendingUsers = new Map<string, any>(); // Global holatda bo'lishi kerak
+
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
     private emailService: EmailService,
     @InjectRepository(User)
     private userRepo: Repository<User>,
   ) {}
 
-  
   async register(dto: RegisterDto) {
-    const pendingUsers = new Map<string, any>();
-    const existing = await this.usersService.findByEmail(dto.email);
+    const existing = await this.userRepo.findOne({ where: { email: dto.email } });
     if (existing) throw new BadRequestException('Email band');
 
     if (pendingUsers.has(dto.email)) {
@@ -45,30 +43,30 @@ export class AuthService {
     });
 
     await this.emailService.sendOtp(dto.email, otp);
-    return { message: 'Emailga tasdiqlash kodi yuborildi' };
+    return { message: 'Tasdiqlash kodi emailga yuborildi' };
   }
 
   async verifyOtp(email: string, otp: string) {
-    const pendingUsers = new Map<string, any>();
     const data = pendingUsers.get(email);
     if (!data || data.otp !== otp) {
       throw new BadRequestException('Noto‘g‘ri kod yoki email');
     }
 
-    // Bazaga saqlaymiz
     const user = this.userRepo.create({
-      ...data,
+      email: data.email,
+      password: data.password,
       isVerified: true,
+      role: 'user', // Agar rol bo‘lsa default bering
     });
-    await this.userRepo.save(user);
 
+    await this.userRepo.save(user);
     pendingUsers.delete(email);
 
-    return { message: 'Email tasdiqlandi ✅' };
+    return { message: 'Email muvaffaqiyatli tasdiqlandi ✅' };
   }
 
   async login(dto: LoginDto, res: Response) {
-    const user = await this.usersService.findByEmail(dto.email);
+    const user = await this.userRepo.findOne({ where: { email: dto.email } });
     if (!user) throw new UnauthorizedException('Login yoki parol noto‘g‘ri');
 
     if (!user.isVerified) throw new ForbiddenException('Email tasdiqlanmagan');
@@ -85,7 +83,7 @@ export class AuthService {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 kun
     });
 
-    return { message: 'Tizimga kirdingiz ✅' };
+    return { message: 'Tizimga muvaffaqiyatli kirdingiz ✅' };
   }
 
   logout(res: Response) {

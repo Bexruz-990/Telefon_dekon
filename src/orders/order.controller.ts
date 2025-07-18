@@ -21,7 +21,7 @@ export class OrdersController {
   @Post(':userId')
   @ApiOperation({ summary: 'Create an order for a user' })
   create(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param('userId', ParseIntPipe) userId: string,
     @Body() dto: CreateOrderDto,
   ) {
     return this.ordersService.createOrder(userId, dto);
@@ -41,7 +41,7 @@ export class OrdersController {
 
   @Get('user/:userId')
   @ApiOperation({ summary: 'Get all orders of a user' })
-  getUserOrders(@Param('userId', ParseIntPipe) userId: number) {
+  getUserOrders(@Param('userId', ParseIntPipe) userId: string) {
     return this.ordersService.getUserOrders(userId);
   }
 

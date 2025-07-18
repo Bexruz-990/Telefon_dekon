@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from 'src/products/entity/product.entity';
-import { User } from 'src/users/entity/user.entity'; // Agar foydalanuvchi bo‘lsa
+import { User } from 'src/auth/entity/user.entity'; // Agar foydalanuvchi bo‘lsa
 
 @Entity()
 export class Wishlist {

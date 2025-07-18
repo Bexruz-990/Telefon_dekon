@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wishlist } from './entity/wishlist.entity';
 import { Repository } from 'typeorm';
 import { Product } from 'src/products/entity/product.entity';
-import { User } from 'src/users/entity/user.entity';
+import { User } from 'src/auth/entity/user.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 
 @Injectable()

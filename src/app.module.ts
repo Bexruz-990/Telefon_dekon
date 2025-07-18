@@ -5,7 +5,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import {ProductModule} from './products/products.module';
 import { CategoryModule } from './categories/categories.module';
-import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
 import {  CartModule} from './cart/cart.module';
 import { WishlistModule } from './wishlist/wishlist.module';
@@ -40,12 +39,10 @@ import { BrandModule } from './categories/brands/brand.module';
     BrandModule,
     ProductModule,
     CategoryModule,
-    UsersModule,
     OrdersModule,
     CartModule,
     WishlistModule,
     CommunityModule,
-    UsersModule
   ],
 })
 export class AppModule {}
