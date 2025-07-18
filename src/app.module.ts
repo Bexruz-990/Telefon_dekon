@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
-import { ProductModule } from './products/products.module';
+import {ProductModule} from './products/products.module';
 import { CategoryModule } from './categories/categories.module';
 import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
-import { CartModule } from './cart/cart.module';
+import {  CartModule} from './cart/cart.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { CommunityModule } from './community/community.module';
 import { BrandModule } from './categories/brands/brand.module';
@@ -31,7 +31,7 @@ import { BrandModule } from './categories/brands/brand.module';
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
 
@@ -45,6 +45,7 @@ import { BrandModule } from './categories/brands/brand.module';
     CartModule,
     WishlistModule,
     CommunityModule,
+    UsersModule
   ],
 })
 export class AppModule {}

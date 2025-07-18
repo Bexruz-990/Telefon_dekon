@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './entity/order.entity';
 import { UsersService } from '../users/user.service';
-import { ProductsService } from '../products/products.service';
+import { ProductService } from '../products/products.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class OrdersService {
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
     private readonly usersService: UsersService,
-    private readonly productsService: ProductsService,
+    private readonly productsService: ProductService,
   ) {}
 
   async createOrder(userId: number, dto: CreateOrderDto) {
@@ -21,7 +21,7 @@ export class OrdersService {
 
     const products = await Promise.all(
       dto.productIds.map(async (id) => {
-        const product = await this.productsService.findOne(id);
+        const product = await this.productsService.findOne(String(id));
         if (!product) throw new NotFoundException(`Product with ID ${id} not found`);
         return product;
       }),
@@ -56,7 +56,7 @@ export class OrdersService {
     if (!user) throw new NotFoundException('User not found');
 
     return this.orderRepo.find({
-      where: { user: { id: userId } },
+      where: { user: { id: String(userId) } },
       relations: ['products'],
     });
   }

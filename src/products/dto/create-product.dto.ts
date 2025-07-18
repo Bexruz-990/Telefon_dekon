@@ -1,4 +1,4 @@
-// src/products/dto/create-product.dto.ts
+
 import {
   IsNotEmpty,
   IsNumber,
@@ -13,18 +13,43 @@ import {
 } from '@nestjs/swagger';
 
 export class PhoneDetails {
-  @ApiProperty() @IsString() screenSize: string;
-  @ApiProperty() @IsString() cpu: string;
-  @ApiProperty() @IsString() mainCamera: string;
-  @ApiProperty() @IsString() frontCamera: string;
-  @ApiProperty() @IsString() battery: string;
-  @ApiProperty() @IsNumber() cores: number;
+  @ApiProperty()
+  @IsString()
+  screenSize: string;
+
+  @ApiProperty()
+  @IsString()
+  cpu: string;
+
+  @ApiProperty()
+  @IsString()
+  mainCamera: string;
+
+  @ApiProperty()
+  @IsString()
+  frontCamera: string;
+
+  @ApiProperty()
+  @IsString()
+  battery: string;
+
+  @ApiProperty()
+  @IsNumber()
+  cores: number;
 }
 
 export class WatchDetails {
-  @ApiProperty() @IsString() displayType: string;
-  @ApiPropertyOptional() @IsOptional() waterResistant: boolean;
-  @ApiProperty() @IsString() batteryLife: string;
+  @ApiProperty()
+  @IsString()
+  displayType: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  waterResistant: boolean;
+
+  @ApiProperty()
+  @IsString()
+   batteryLife: string;
 }
 
 export class CameraDetails {
@@ -47,9 +72,15 @@ export class ComputerDetails {
 }
 
 export class GamingDetails {
-  @ApiProperty() @IsString() type: string;
-  @ApiProperty() @IsString() storage: string;
-  @ApiPropertyOptional() @IsOptional() controllerIncluded: boolean;
+  @ApiProperty()
+  @IsString()
+  type: string;
+  @ApiProperty()
+  @IsString()
+  storage: string;
+  @ApiPropertyOptional()
+  @IsOptional()
+  controllerIncluded: boolean;
 }
 
 export class CreateProductDto {

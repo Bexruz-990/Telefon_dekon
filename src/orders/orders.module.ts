@@ -4,13 +4,13 @@ import { Order } from './entity/order.entity';
 import { OrdersService } from './order.service';
 import { OrdersController } from './order.controller';
 import { UsersModule } from '../users/users.module';
-import { ProductsModule } from '../products/products.module'; // 👈 BU YERDA
+import {ProductModule} from 'src/products/products.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order]),
     UsersModule,
-    ProductsModule, // 👈 SHU QATORNI QO‘SHING
+    ProductModule,
   ],
   providers: [OrdersService],
   controllers: [OrdersController],

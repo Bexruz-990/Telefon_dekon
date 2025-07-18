@@ -1,30 +1,33 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { AddItemDto } from './dto/add-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
+import { CreateCartDto } from './dto/add-item.dto';
 
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  // For simplicity, assume userId comes from body/query for now.
-  @Post(':userId')
-  addItem(@Param('userId', ParseIntPipe) userId: number, @Body() dto: AddItemDto) {
-    return this.cartService.addItem(userId, dto);
+  @Post()
+  addToCart(@Body() dto: CreateCartDto) {
+    return this.cartService.addToCart(dto);
   }
 
   @Get(':userId')
-  getCart(@Param('userId', ParseIntPipe) userId: number) {
+  getCart(@Param('userId') userId: string) {
     return this.cartService.getUserCart(userId);
   }
 
-  @Patch('item/:id')
-  updateItem(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateItemDto) {
-    return this.cartService.updateItem(id, dto);
+  @Patch(':id/:quantity')
+  updateQty(@Param('id') id: string, @Param('quantity') quantity: number) {
+    return this.cartService.updateQuantity(id, quantity);
   }
 
-  @Delete('item/:id')
-  removeItem(@Param('id', ParseIntPipe) id: number) {
+  @Delete(':id')
+  remove(@Param('id') id: string) {
     return this.cartService.removeItem(id);
+  }
+
+  @Delete('clear/:userId')
+  clear(@Param('userId') userId: string) {
+    return this.cartService.clearUserCart(userId);
   }
 }

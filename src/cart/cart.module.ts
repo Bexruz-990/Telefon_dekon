@@ -4,13 +4,13 @@ import { CartItem } from './entity/cart-item.entity';
 import { CartService } from './cart.service';
 import { CartController } from './cart.controller';
 import { UsersModule } from '../users/users.module';
-import { ProductsModule } from '../products/products.module';
+import { ProductModule } from '../products/products.module'; // Importing ProductModule
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CartItem]),
     UsersModule,
-    ProductsModule,
+    ProductModule,
   ],
   providers: [CartService],
   controllers: [CartController],

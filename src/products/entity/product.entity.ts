@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Brand } from 'src/categories/brands/entities/brand.entity';
 import { Category } from 'src/categories/entity/category.entity';
+import { CartItem } from 'src/cart/entity/cart-item.entity';
 
 @Entity('products')
 export class Product {
@@ -45,4 +47,7 @@ export class Product {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+    @OneToMany(() => CartItem, cart => cart.product)
+  cartItems: CartItem[];
 }
