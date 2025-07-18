@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   BadRequestException,
   ForbiddenException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -14,7 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
 
-const pendingUsers = new Map<string, any>(); // Global holatda bo'lishi kerak
+const pendingUsers = new Map<string, any>();
 
 @Injectable()
 export class AuthService {
@@ -54,9 +55,10 @@ export class AuthService {
 
     const user = this.userRepo.create({
       email: data.email,
+      name: data.name, // MUHIM: name ni qo‘shish kerak
       password: data.password,
       isVerified: true,
-      role: 'user', // Agar rol bo‘lsa default bering
+      role: 'user',
     });
 
     await this.userRepo.save(user);
@@ -66,28 +68,49 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, res: Response) {
-    const user = await this.userRepo.findOne({ where: { email: dto.email } });
-    if (!user) throw new UnauthorizedException('Login yoki parol noto‘g‘ri');
+    try {
+      const user = await this.userRepo.findOne({ where: { email: dto.email } });
+      if (!user || !(await bcrypt.compare(dto.password, user.password))) {
+        throw new UnauthorizedException('Email yoki parol noto‘g‘ri');
+      }
 
-    if (!user.isVerified) throw new ForbiddenException('Email tasdiqlanmagan');
+      if (!user.isVerified) throw new ForbiddenException('Email tasdiqlanmagan');
 
-    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
-    if (!isPasswordValid) throw new UnauthorizedException('Login yoki parol noto‘g‘ri');
+      const payload = { sub: user.id, email: user.email, role: user.role };
+      const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '15m' });
+      const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '7d' });
 
-    const payload = { sub: user.id, email: user.email };
-    const token = this.jwtService.sign(payload);
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      });
 
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 kun
-    });
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
+      });
 
-    return { message: 'Tizimga muvaffaqiyatli kirdingiz ✅' };
+      user.refreshToken = refreshToken;
+      await this.userRepo.save(user);
+
+      return {
+        id: user.id,
+        email: user.email,
+        username: user.name,
+        role: user.role,
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Tizimga kirishda xatolik: ' + error.message);
+    }
   }
 
   logout(res: Response) {
-    res.clearCookie('access_token');
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return { message: 'Tizimdan chiqdingiz 🔓' };
   }
 }

@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   Res,
-  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -15,13 +14,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Query() dto: RegisterDto) {
+  register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
   @Post('verify')
-  verify(@Query('email') email: string, @Query('otp') otp: string) {
-    return this.authService.verifyOtp(email, otp);
+  verify(@Body() body: { email: string; otp: string }) {
+    return this.authService.verifyOtp(body.email, body.otp);
   }
 
   @Post('login')

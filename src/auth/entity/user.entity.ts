@@ -8,6 +8,9 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  name: string
+
   @Column({ unique: true })
   email: string;
 
@@ -26,6 +29,11 @@ export class User {
   @OneToMany(() => CartItem, cart => cart.user)
 
   cartItems: CartItem[];
+
+
+  
+  @Column({ nullable: true })
+  refreshToken: string;
 
 @Column({ nullable: true })
 otp: string;
