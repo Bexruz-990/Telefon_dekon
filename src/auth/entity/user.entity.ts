@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Order } from 'src/orders/entity/order.entity';
+
 import { Wishlist } from 'src/wishlist/entity/wishlist.entity';
-import { CartItem } from 'src/cart/entity/cart-item.entity';
+import { Cart } from 'src/cart/entity/cart-item.entity';
 
 @Entity()
 export class User {
@@ -20,15 +20,12 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @OneToMany(() => Order, order => order.user)
-  orders: Order[];
-
   @OneToMany(() => Wishlist, wishlist => wishlist.user)
   wishlist: Wishlist[];
 
-  @OneToMany(() => CartItem, cart => cart.user)
+  @OneToMany(() => Cart, cart => cart.user)
 
-  cartItems: CartItem[];
+  cartItems: Cart[];
 
 
   

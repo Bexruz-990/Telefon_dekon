@@ -1,25 +1,73 @@
+import { IsNotEmpty, IsString, IsUUID, IsNumber, IsUrl, IsBoolean, IsArray } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-} from '@nestjs/swagger';
-
-export class PhoneDetails {
+export class CreateComputerDto {
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
-  screenSize: string;
+  name: string;
+
+
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
 
   @ApiProperty()
   @IsString()
   cpu: string;
+
+  @ApiProperty()
+  @IsString()
+  ram: string;
+
+  @ApiProperty()
+  @IsString()
+  storage: string;
+
+  @ApiProperty()
+  @IsString()
+  gpu: string;
+
+  @ApiProperty()
+  @IsString()
+  screen: string;
+
+  @ApiProperty()
+  @IsString()
+  battery: string;
+
+  @ApiProperty()
+  @IsString()
+  os: string;
+
+  @ApiProperty()
+  @IsUUID()
+  brandId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  categoryId: number;
+}
+
+
+
+export class CreateSmartphoneDto {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty()
+  @IsString()
+  cpu: string;
+
+  @ApiProperty()
+  @IsString()
+  screenSize: string;
 
   @ApiProperty()
   @IsString()
@@ -34,59 +82,40 @@ export class PhoneDetails {
   battery: string;
 
   @ApiProperty()
-  @IsNumber()
-  cores: number;
-}
-
-export class WatchDetails {
-  @ApiProperty()
-  @IsString()
-  displayType: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  waterResistant: boolean;
-
-  @ApiProperty()
-  @IsString()
-   batteryLife: string;
-}
-
-export class CameraDetails {
-  @ApiProperty() @IsString() resolution: string;
-  @ApiProperty() @IsString() lens: string;
-  @ApiProperty() @IsString() sensor: string;
-}
-
-export class HeadphoneDetails {
-  @ApiProperty() @IsString() battery: string;
-  @ApiProperty() @IsString() connectionType: string;
-  @ApiPropertyOptional() @IsOptional() noiseCancelling: boolean;
-}
-
-export class ComputerDetails {
-  @ApiProperty() @IsString() processor: string;
-  @ApiProperty() @IsNumber() ram: number;
-  @ApiProperty() @IsNumber() storage: number;
-  @ApiProperty() @IsString() gpu: string;
-}
-
-export class GamingDetails {
-  @ApiProperty()
-  @IsString()
-  type: string;
-  @ApiProperty()
   @IsString()
   storage: string;
-  @ApiPropertyOptional()
-  @IsOptional()
-  controllerIncluded: boolean;
-}
 
-export class CreateProductDto {
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  ram: string;
+
+  @ApiProperty()
+  @IsString()
+  os: string;
+
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty()
+  @IsUrl()
+  imageUrl: string;
+
+  @ApiProperty()
+  @IsUUID()
+  brandId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  categoryId: number;
+}
+
+
+
+
+export class CreateHeadphonesDto {
+  @ApiProperty()
+  @IsString()
   name: string;
 
   @ApiProperty()
@@ -95,49 +124,137 @@ export class CreateProductDto {
 
   @ApiProperty()
   @IsString()
-  description: string;
+  type: string;
+
+  @ApiProperty()
+  @IsString()
+  battery: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  noiseCancel: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  mic: boolean;
+
+  @ApiProperty()
+  @IsString()
+  bluetoothVersion: string;
 
   @ApiProperty()
   @IsNumber()
-  brandId: number;
+  amount: number;
+
+  @ApiProperty()
+  @IsUrl()
+  imageUrl: string;
+
+  @ApiProperty()
+  @IsUUID()
+  brandId: string;
 
   @ApiProperty()
   @IsNumber()
   categoryId: number;
+}
 
-  @ApiPropertyOptional({ type: PhoneDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => PhoneDetails)
-  phoneDetails?: PhoneDetails;
 
-  @ApiPropertyOptional({ type: WatchDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => WatchDetails)
-  watchDetails?: WatchDetails;
 
-  @ApiPropertyOptional({ type: CameraDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CameraDetails)
-  cameraDetails?: CameraDetails;
 
-  @ApiPropertyOptional({ type: HeadphoneDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => HeadphoneDetails)
-  headphoneDetails?: HeadphoneDetails;
 
-  @ApiPropertyOptional({ type: ComputerDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => ComputerDetails)
-  computerDetails?: ComputerDetails;
+export class CreateSmartwatchDto {
+  @ApiProperty()
+  @IsString()
+  name: string;
 
-  @ApiPropertyOptional({ type: GamingDetails })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => GamingDetails)
-  gamingDetails?: GamingDetails;
+  @ApiProperty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty()
+  @IsString()
+  screen: string;
+
+  @ApiProperty()
+  @IsString()
+  battery: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  waterproof: boolean;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  healthSensors: string[];
+
+  @ApiProperty()
+  @IsString()
+  os: string;
+
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty()
+  @IsUrl()
+  imageUrl: string;
+
+  @ApiProperty()
+  @IsUUID()
+  brandId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  categoryId: number;
+}
+
+
+
+
+export class CreateGameStationDto {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty()
+  @IsString()
+  cpu: string;
+
+  @ApiProperty()
+  @IsString()
+  gpu: string;
+
+  @ApiProperty()
+  @IsString()
+  storage: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  supportsVR: boolean;
+
+  @ApiProperty()
+  @IsString()
+  edition: string;
+
+  @ApiProperty()
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty()
+  @IsUrl()
+  imageUrl: string;
+
+  @ApiProperty()
+  @IsUUID()
+  brandId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  categoryId: number;
 }

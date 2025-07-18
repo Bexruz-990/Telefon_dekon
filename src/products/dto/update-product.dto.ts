@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateProductDto } from './create-product.dto';
+import { PartialType } from '@nestjs/swagger';
+import { CreateComputerDto, CreateGameStationDto, CreateHeadphonesDto, CreateSmartphoneDto, CreateSmartwatchDto } from './create-product.dto';
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {}
+export class UpdateComputerDto extends PartialType(CreateComputerDto) {}
+
+export class UpdateSmartphoneDto extends PartialType(CreateSmartphoneDto) {}
+
+export class UpdateHeadphonesDto extends PartialType(CreateHeadphonesDto) {}
+
+export class UpdateSmartwatchDto extends PartialType(CreateSmartwatchDto) {}
+
+export class UpdateGameStationDto extends PartialType(CreateGameStationDto) {}

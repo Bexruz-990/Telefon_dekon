@@ -1,0 +1,16 @@
+// src/products/headphones/headphones.module.ts
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { HeadphonesProductController } from './headphones.controller';
+import { HeadphonesProductService } from './headphones.service';
+import { Brand } from 'src/categories/brands/entities/brand.entity';
+import { Category } from 'src/categories/entity/category.entity';
+import { HeadphonesProduct } from '../entity/product.entity';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([HeadphonesProduct, Brand, Category])],
+  controllers: [HeadphonesProductController],
+  providers: [HeadphonesProductService],
+})
+export class HeadphonesModule {}

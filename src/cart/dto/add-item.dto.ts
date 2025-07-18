@@ -1,15 +1,29 @@
-import { IsNotEmpty, IsUUID, IsNumber, Min } from 'class-validator';
+// src/cart/dto/create-cart.dto.ts
+import { IsString, IsNumber, IsNotEmpty, IsUrl } from 'class-validator';
 
 export class CreateCartDto {
+  @IsString()
   @IsNotEmpty()
-  @IsUUID()
   userId: string;
 
+  @IsString()
   @IsNotEmpty()
-  @IsUUID()
   productId: string;
 
+  @IsString()
+  @IsNotEmpty()
+  productType: string; // Masalan: 'smartphone', 'computer', 'headphones'
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
   @IsNumber()
-  @Min(1)
+  price: number;
+
+  @IsNumber()
   quantity: number;
+
+  @IsUrl()
+  imageUrl: string;
 }

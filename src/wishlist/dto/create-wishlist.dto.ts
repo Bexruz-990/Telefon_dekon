@@ -1,17 +1,28 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+// src/wishlist/dto/create-wishlist.dto.ts
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString, IsUUID } from 'class-validator';
+import { ProductType } from '../entity/wishlist.entity';
 
 export class CreateWishlistDto {
-  @ApiProperty({ example: 'uuid-product-id' })
-  @IsUUID() // 👉 faqat UUID bo'lishi shart
-  productId: string;
-
-  @ApiProperty({ example: 'uuid-user-id' })
   @IsUUID()
   userId: string;
 
-  @ApiProperty({ example: 2 })
-  @IsNumber() // 👉 raqam bo'lishi shart (masalan: 1, 2, 3)
+  @IsUUID()
+  productId: string;
+
+  @IsEnum(['smartphone', 'computer', 'headphones', 'smartwatch', 'gamestation'])
+  productType: ProductType;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  imageUrl: string;
+
+  @IsNumber()
+  @IsPositive()
+  price: number;
+
+  @IsNumber()
+  @IsPositive()
   quantity: number;
 }
-

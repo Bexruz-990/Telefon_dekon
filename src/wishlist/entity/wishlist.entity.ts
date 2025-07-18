@@ -1,38 +1,49 @@
-// src/wishlist/wishlist.entity.ts
+// src/wishlist/entity/wishlist.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
-import { Product } from 'src/products/entity/product.entity';
-import { User } from 'src/auth/entity/user.entity'; // Agar foydalanuvchi bo‘lsa
+import { User } from 'src/auth/entity/user.entity';
 
-@Entity()
+export type ProductType =
+  | 'smartphone'
+  | 'computer'
+  | 'headphones'
+  | 'smartwatch'
+  | 'gamestation';
+
+@Entity('wishlists')
 export class Wishlist {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, user => user.wishlist, { eager: true })
+  @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => Product, { eager: true })
-  product: Product;
+  @Column()
+  productId: string; // Mahsulotning ID si (uuid)
+
+  @Column({ type: 'enum', enum: ['smartphone', 'computer', 'headphones', 'smartwatch', 'gamestation'] })
+  productType: ProductType; // Mahsulot turi
+
+  @Column()
+  name: string; // Mahsulot nomi
+
+  @Column('decimal')
+  price: number; // Mahsulot narxi
+
+  @Column()
+  imageUrl: string; // Mahsulot rasmi
 
   @Column({ default: 1 })
-  quantity: number;
+  quantity: number; // Nechta istayapti
 
   @Column('decimal')
-  price: number;
-
-  @Column('decimal')
-  totalPrice: number;
+  totalPrice: number; // Umumiy narx
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

@@ -1,52 +1,29 @@
-// src/categories/category.controller.ts
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
-import { CategoryService } from './categories.service';
+// src/categories/categories.controller.ts
+import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ApiTags, ApiOperation, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('Categories')
 @Controller('categories')
-export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+export class CategoriesController {
+  constructor(private readonly service: CategoriesService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Kategoriya yaratish' })
-  @ApiBody({ type: CreateCategoryDto })
+  @ApiOperation({ summary: 'Create new category' })
   create(@Body() dto: CreateCategoryDto) {
-    return this.categoryService.create(dto);
+    return this.service.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Barcha kategoriyalarni olish' })
+  @ApiOperation({ summary: 'Get all categories' })
   findAll() {
-    return this.categoryService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Bitta kategoriya olish' })
-  @ApiParam({ name: 'id', type: Number })
-  findOne(@Param('id') id: number) {
-    return this.categoryService.findOne(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Kategoriya yangilash' })
-  update(@Param('id') id: number, @Body() dto: UpdateCategoryDto) {
-    return this.categoryService.update(id, dto);
+    return this.service.findAll();
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Kategoriya o‘chirish' })
+  @ApiOperation({ summary: 'Delete category by ID' })
   remove(@Param('id') id: number) {
-    return this.categoryService.remove(id);
+    return this.service.remove(+id);
   }
 }

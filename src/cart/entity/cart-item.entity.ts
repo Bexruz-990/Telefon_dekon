@@ -1,18 +1,47 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+// src/cart/entity/cart.entity.ts
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from 'src/auth/entity/user.entity';
-import { Product } from 'src/products/entity/product.entity';
 
-@Entity()
-export class CartItem {
+@Entity('cart')
+export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, user => user.cartItems, { onDelete: 'CASCADE', eager: true })
-  user: User;
+  @Column()
+  productId: string; // Mahsulotning IDsi
 
-  @ManyToOne(() => Product, product => product.cartItems, { eager: true })
-  product: Product;
+  @Column()
+  productType: string; // Mahsulot turi (smartphone, computer, headphones...)
+
+  @Column()
+  name: string; // Mahsulot nomi
+
+  @Column('decimal')
+  price: number; // Donalik narx
+
+  @Column()
+  imageUrl: string;
 
   @Column({ default: 1 })
   quantity: number;
+
+  @Column('decimal')
+  totalPrice: number; // quantity * price
+
+  @ManyToOne(() => User,user => user.cartItems)
+  user: User;
+
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

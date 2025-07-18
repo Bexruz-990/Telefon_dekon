@@ -1,43 +1,29 @@
-// src/categories/brands/brand.controller.ts
-import {
-  Controller,
-  Post,
-  Get,
-  Param,
-  Patch,
-  Delete,
-  Body,
-} from '@nestjs/common';
-import { BrandService } from './brand.service';
+// src/categories/brands/brands.controller.ts
+import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
+import { BrandsService } from './brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
-import { UpdateBrandDto } from './dto/update-brand.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Brands')
 @Controller('brands')
-export class BrandController {
-  constructor(private readonly brandService: BrandService) {}
+export class BrandsController {
+  constructor(private readonly service: BrandsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create new brand' })
   create(@Body() dto: CreateBrandDto) {
-    return this.brandService.create(dto);
+    return this.service.create(dto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all brands' })
   findAll() {
-    return this.brandService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.brandService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateBrandDto) {
-    return this.brandService.update(id, dto);
+    return this.service.findAll();
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete brand by ID' })
   remove(@Param('id') id: string) {
-    return this.brandService.remove(id);
+    return this.service.remove(id);
   }
 }

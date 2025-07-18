@@ -15,7 +15,8 @@ import { VerifyOtpDto } from './dto/verify.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  @ApiOperation({ summary: 'Registratsiya qilish' })
+  @ApiResponse({ status: 200, description: 'Registratsiya muvaffaqiyatli tasdiqlandi' })
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
@@ -38,7 +39,7 @@ export class AuthController {
     const result = await this.authService.login(loginDto, res);
     return res.status(HttpStatus.OK).json(result);
   }
-
+  @ApiOperation({ summary: 'Tizimdan Chiqish' })
   @Post('logout')
   logout(@Res() res: Response) {
     return this.authService.logout(res);

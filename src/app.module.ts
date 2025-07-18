@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { AuthModule } from './auth/auth.module';
-import {ProductModule} from './products/products.module';
-import { CategoryModule } from './categories/categories.module';
-import { OrdersModule } from './orders/orders.module';
+import { CategoriesModule } from './categories/categories.module';
 import {  CartModule} from './cart/cart.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { CommunityModule } from './community/community.module';
-import { BrandModule } from './categories/brands/brand.module';
+import { GameStationModule } from './products/gamestation/gamestation.module';
+import { HeadphonesModule } from './products/headphones/headphones.module';
+import { ComputerModule } from './products/computer/computer.module';
+import { SmartphoneModule } from './products/smartphone/smartphone.module';
+import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
 
 @Module({
   imports: [
@@ -36,13 +37,16 @@ import { BrandModule } from './categories/brands/brand.module';
 
 
     AuthModule,
-    BrandModule,
-    ProductModule,
-    CategoryModule,
-    OrdersModule,
+    CategoriesModule,
     CartModule,
     WishlistModule,
     CommunityModule,
+    GameStationModule,
+    HeadphonesModule,
+    ComputerModule,
+    SmartphoneModule,
+    SmartwatchModule,
+
   ],
 })
 export class AppModule {}

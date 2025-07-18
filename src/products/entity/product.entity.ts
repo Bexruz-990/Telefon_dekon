@@ -2,52 +2,232 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
-  OneToMany,
 } from 'typeorm';
 import { Brand } from 'src/categories/brands/entities/brand.entity';
 import { Category } from 'src/categories/entity/category.entity';
-import { CartItem } from 'src/cart/entity/cart-item.entity';
 
-@Entity('products')
-export class Product {
+@Entity('computers')
+export class ComputerProduct {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
   name: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal')
   price: number;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column()
+  cpu: string;
 
-  @ManyToOne(() => Brand, brand => brand.products, {
-    eager: true,
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'brandId' })
-  brand: Brand;
+  @Column()
+  ram: string;
 
-  @ManyToOne(() => Category, category => category.products, {
-    eager: true,
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn({ name: 'categoryId' })
+  @Column()
+  storage: string;
+
+  @Column()
+  gpu: string;
+
+  @Column()
+  screen: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  battery: string;
+
+  @Column()
+  os: string;
+
+@ManyToOne(() => Category, { eager: true })
+category: Category;
+
+@ManyToOne(() => Brand, { eager: true })
+brand: Brand;
+
+}
+
+
+
+
+@Entity('smartphones')
+export class SmartphoneProduct {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column()
+  cpu: string;
+
+  @Column()
+  screenSize: string;
+
+  @Column()
+  mainCamera: string;
+
+  @Column()
+  frontCamera: string;
+
+  @Column()
+  battery: string;
+
+  @Column()
+  storage: string;
+
+  @Column()
+  ram: string;
+
+  @Column()
+  os: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  imageUrl: string;
+
+@ManyToOne(() => Category, { eager: true })
+category: Category;
+
+@ManyToOne(() => Brand, { eager: true })
+brand: Brand;
+
+}
+
+
+
+
+@Entity('headphones')
+export class HeadphonesProduct {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column()
+  type: string; // Wireless / Wired
+
+  @Column()
+  battery: string;
+
+  @Column()
+  noiseCancel: boolean;
+
+  @Column()
+  mic: boolean;
+
+  @Column()
+  bluetoothVersion: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  imageUrl: string;
+
+@ManyToOne(() => Category, { eager: true })
+category: Category;
+
+@ManyToOne(() => Brand, { eager: true })
+brand: Brand;
+
+}
+
+
+
+
+@Entity('smartwatches')
+export class SmartwatchProduct {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column()
+  screen: string;
+
+  @Column()
+  battery: string;
+
+  @Column()
+  waterproof: boolean;
+
+  @Column('simple-array')
+  healthSensors: string[];
+
+  @Column()
+  os: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  imageUrl: string;
+
+  @ManyToOne(() => Category, { eager: true })
   category: Category;
+  
+  @ManyToOne(() => Brand, { eager: true })
+  brand: Brand;
+  
+}
 
-  @CreateDateColumn()
-  createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
 
-    @OneToMany(() => CartItem, cart => cart.product)
-  cartItems: CartItem[];
+
+@Entity('gamestations')
+export class GameStationProduct {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+  
+
+  @Column('decimal')
+  price: number;
+
+  @Column()
+  cpu: string;
+
+  @Column()
+  gpu: string;
+
+  @Column()
+  storage: string;
+
+  @Column()
+  supportsVR: boolean;
+
+  @Column()
+  edition: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  imageUrl: string;
+
+@ManyToOne(() => Category, { eager: true })
+category: Category;
+
+@ManyToOne(() => Brand, { eager: true })
+brand: Brand;
+
 }

@@ -6,26 +6,18 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Category } from 'src/categories/entity/category.entity';
-import { Product } from 'src/products/entity/product.entity';
+import { Category } from '../../entity/category.entity';
 
-@Entity()
+@Entity('brands')
 export class Brand {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
-
-  @ManyToOne(() => Category, category => category.brands, {
+  @ManyToOne(() => Category, (category) => category.brands, {
     onDelete: 'CASCADE',
-    eager: true,
   })
   category: Category;
-
-  @OneToMany(() => Product, product => product.brand)
-  products: Product[];
 }
