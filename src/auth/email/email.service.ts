@@ -8,8 +8,8 @@ export class EmailService {
   private readonly logger = new Logger(EmailService.name);
 
   constructor(private configService: ConfigService) {
-    const email = this.configService.get<string>('GMAIL_USER');
-    const pass = this.configService.get<string>('GMAIL_PASS');
+    const email = this.configService.get<string>('GMAIL_USER')||"marimovbehruz57@gmail.com";
+    const pass = this.configService.get<string>('GMAIL_PASS')||"tekd fkab zjxd icpo";
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {

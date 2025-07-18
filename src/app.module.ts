@@ -18,23 +18,23 @@ import { BrandModule } from './categories/brands/brand.module';
       isGlobal: true, // Har joyda ishlashi uchun
     }),
 
-    // ✅ DATABASE ulanishi
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: config.get<'postgres'>('DB_TYPE'), // postgres
-        host: config.get<string>('DB_HOST'),
-        port: config.get<number>('DB_PORT'),
-        username: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_NAME'),
+        type: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres',
+        password: '2007',
+        database: 'estore',
         autoLoadEntities: true,
         synchronize: true,
       }),
     }),
 
-    // ✅ Boshqa modullar
+
     AuthModule,
     BrandModule,
     ProductModule,

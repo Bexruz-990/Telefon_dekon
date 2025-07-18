@@ -23,7 +23,7 @@ import { User } from './entity/user.entity' // 👈 bu kerak
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
+        secret: "mysecretkey",
         signOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
