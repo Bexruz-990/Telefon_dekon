@@ -14,6 +14,7 @@ import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { OtherProductModule } from './products/others/other-product.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
     ComputerModule,
     SmartphoneModule,
     SmartwatchModule,
+    OtherProductModule
 
   ],
 

@@ -5,7 +5,6 @@ import {
   Res,
   HttpStatus,
   Get,
-  ParseUUIDPipe,
   Put,
   Param,
   Delete,
@@ -78,7 +77,7 @@ export class AuthController {
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
   @Get(':id')
   @ApiOperation({ summary: 'ID orqali foydalanuvchini olish' })
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id', ) id: string) {
     return this.authService.findOne(id);
   }
 
@@ -89,7 +88,7 @@ export class AuthController {
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
   @Put(':id')
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateUserDto) {
+  update(@Param('id', ) id: string, @Body() dto: UpdateUserDto) {
     return this.authService.update(id, dto);
   }
 
@@ -100,7 +99,7 @@ export class AuthController {
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
   @Delete(':id')
   @ApiOperation({ summary: 'Foydalanuvchini o‘chirish' })
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id', ) id: string) {
     return this.authService.remove(id);
   }
 
