@@ -7,11 +7,12 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Category } from '../../entity/category.entity';
+import { isNumber, IsUUID } from 'class-validator';
 
 @Entity('brands')
 export class Brand {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;

@@ -38,7 +38,7 @@ export class BrandsService {
   }
 
   async remove(id: string) {
-    const brand = await this.brandRepo.findOne({ where:{ id } });
+    const brand = await this.brandRepo.findOne({ where: { id: Number(id) } });
     if (!brand) throw new NotFoundException('Brand topilmadi');
     await this.brandRepo.remove(brand);
     return { message: 'Brand o‘chirildi' };

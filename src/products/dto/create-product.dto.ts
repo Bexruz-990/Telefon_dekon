@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsString, IsUUID, IsNumber, IsUrl, IsBoolean, IsArray } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, IsUUID, IsNumber, IsUrl, IsBoolean, IsArray, IsOptional, isNumber } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateComputerDto {
   @ApiProperty()
@@ -42,8 +42,8 @@ export class CreateComputerDto {
   os: string;
 
   @ApiProperty()
-  @IsUUID()
-  brandId: string;
+  @IsNumber()
+  brandId: number;
 
   @ApiProperty()
   @IsNumber()
@@ -102,8 +102,8 @@ export class CreateSmartphoneDto {
   imageUrl: string;
 
   @ApiProperty()
-  @IsUUID()
-  brandId: string;
+  @IsNumber()
+  brandId: number;
 
   @ApiProperty()
   @IsNumber()
@@ -151,8 +151,8 @@ export class CreateHeadphonesDto {
   imageUrl: string;
 
   @ApiProperty()
-  @IsUUID()
-  brandId: string;
+  @IsNumber()
+  brandId: number;
 
   @ApiProperty()
   @IsNumber()
@@ -202,8 +202,8 @@ export class CreateSmartwatchDto {
   imageUrl: string;
 
   @ApiProperty()
-  @IsUUID()
-  brandId: string;
+  @IsNumber()
+  brandId: number;
 
   @ApiProperty()
   @IsNumber()
@@ -251,10 +251,48 @@ export class CreateGameStationDto {
   imageUrl: string;
 
   @ApiProperty()
-  @IsUUID()
-  brandId: string;
+  @IsNumber()
+  brandId: number;
 
   @ApiProperty()
   @IsNumber()
   categoryId: number;
+}
+
+
+
+
+// src/products/dto/create-other-product.dto.ts
+
+export class CreateOtherProductDto {
+  @ApiProperty({ example: 'Printer HP LaserJet Pro' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ example: 799.99 })
+  @IsNumber()
+  price: number;
+
+  @ApiPropertyOptional({ example: 'A4 formatda, tez chop etadi' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({ example: 15 })
+  @IsOptional()
+  @IsNumber()
+  amount?: number;
+
+  @ApiProperty({ example: 'https://example.com/image.jpg' })
+  @IsString()
+  imageUrl: string;
+
+  @ApiProperty({ example: 'uuid-brand-id' })
+  @IsString()
+  brandId: string;
+
+  @ApiProperty({ example: 'uuid-category-id' })
+  @IsString()
+  categoryId: string;
 }

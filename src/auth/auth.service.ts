@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ForbiddenException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -14,6 +15,8 @@ import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
+import { UpdateBrandDto } from 'src/categories/brands/dto/update-brand.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -129,4 +132,30 @@ export class AuthService {
     res.clearCookie('refreshToken');
     return { message: 'Tizimdan chiqdingiz 🔓' };
   }
+
+
+
+  async findAll() {
+    const users = await this.userRepo.find();
+    return { count: users.length, users };
+  }
+
+  async findOne(id: string) {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('Foydalanuvchi topilmadi');
+    return user;
+  }
+
+  async update(id: string, dto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    const updated = await this.userRepo.save({ ...user, ...dto });
+    return { message: 'Foydalanuvchi yangilandi ✅', user: updated };
+  }
+
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    await this.userRepo.remove(user);
+    return { message: 'Foydalanuvchi o‘chirildi 🗑️' };
+  }
 }
+

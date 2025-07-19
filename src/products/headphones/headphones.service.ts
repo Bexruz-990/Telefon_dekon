@@ -26,10 +26,10 @@ import {
     ) {}
   
     async create(dto: CreateHeadphonesDto) {
-      const brand = await this.brandRepo.findOneBy({ id: dto.brandId });
+      const brand = await this.brandRepo.findOneBy({ id: Number(dto.brandId) });
       if (!brand) throw new NotFoundException('Brand topilmadi');
-  
-      const category = await this.categoryRepo.findOneBy({ id: dto.categoryId });
+
+      const category = await this.categoryRepo.findOneBy({ id: (dto.categoryId) });
       if (!category) throw new NotFoundException('Category topilmadi');
   
       const product = this.repo.create({ ...dto, brand, category });
@@ -60,7 +60,7 @@ import {
       if (!product) throw new NotFoundException('Naushnik topilmadi');
   
       if (dto.brandId) {
-        const brand = await this.brandRepo.findOneBy({ id: dto.brandId });
+        const brand = await this.brandRepo.findOneBy({ id: Number(dto.brandId) });
         if (!brand) throw new NotFoundException('Brand topilmadi');
         product.brand = brand;
       }

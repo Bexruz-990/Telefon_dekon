@@ -1,11 +1,16 @@
+// src/main.ts
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { JwtAuthGuard } from './auth/strategy/jwt-auth.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RolesGuard } from './auth/strategy/guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
 
+  // Global Validation Pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -13,6 +18,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // 🌐 Global JWT Auth Guard (foydalanuvchi token bilan kirsin)
+  const reflecto = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflecto));
+  app.useGlobalGuards(new RolesGuard(reflecto));
 
   // Swagger konfiguratsiyasi
   const config = new DocumentBuilder()
@@ -28,7 +38,7 @@ async function bootstrap() {
         description: 'JWT token kiriting',
         in: 'header',
       },
-      'access-token', // bu keyinchalik ishlatiladi (Swagger security)
+      'access-token',
     )
     .build();
 

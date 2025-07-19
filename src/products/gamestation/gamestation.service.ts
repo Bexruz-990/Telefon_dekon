@@ -27,7 +27,7 @@ import { UpdateGameStationDto } from '../dto/update-product.dto';
     ) {}
   
     async create(dto: CreateGameStationDto) {
-      const brand = await this.brandRepo.findOneBy({ id: dto.brandId });
+      const brand = await this.brandRepo.findOneBy({ id: Number(dto.brandId) });
       if (!brand) throw new NotFoundException('Brand topilmadi');
   
       const category = await this.categoryRepo.findOneBy({ id: dto.categoryId });
@@ -61,7 +61,7 @@ import { UpdateGameStationDto } from '../dto/update-product.dto';
       if (!product) throw new NotFoundException('Game Station topilmadi');
   
       if (dto.brandId) {
-        const brand = await this.brandRepo.findOneBy({ id: dto.brandId });
+        const brand = await this.brandRepo.findOneBy({ id: Number(dto.brandId) });
         if (!brand) throw new NotFoundException('Brand topilmadi');
         product.brand = brand;
       }

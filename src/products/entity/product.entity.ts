@@ -55,7 +55,7 @@ brand: Brand;
 
 @Entity('smartphones')
 export class SmartphoneProduct {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
@@ -117,7 +117,7 @@ export class HeadphonesProduct {
   price: number;
 
   @Column()
-  type: string; // Wireless / Wired
+  type: string; 
 
   @Column()
   battery: string;
@@ -230,4 +230,35 @@ category: Category;
 @ManyToOne(() => Brand, { eager: true })
 brand: Brand;
 
+}
+
+
+
+
+
+@Entity('other_products')
+export class OtherProduct {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column({ nullable: true, type: 'text' })
+  description?: string;
+
+  @Column({ default: 0 })
+  amount: number;
+
+  @Column()
+  imageUrl: string;
+
+  @ManyToOne(() => Brand, { eager: true })
+  brand: Brand;
+
+  @ManyToOne(() => Category, { eager: true })
+  category: Category;
 }
