@@ -11,14 +11,17 @@ import {
 import { OtherProductService } from './other-product.service';
 import { CreateOtherProductDto } from '../dto/create-product.dto';
 import { UpdateOtherProductDto } from '../dto/update-product.dto';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiTags('Other Products')
 @Controller('other-products')
+@ApiBearerAuth('access-token')
 export class OtherProductController {
   constructor(private service: OtherProductService) {}
 
   @Post()
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Yangi boshqa mahsulot qo‘shish' })
   @ApiResponse({ status: 201, description: 'Boshqa mahsulot yaratildi ✅' })
   @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
@@ -69,6 +72,7 @@ export class OtherProductController {
   }
 
   @Patch(':id')
+  @Roles('Admin', 'Superadmin')
   @ApiParam({ name: 'id', type: 'string' })
   @ApiOperation({ summary: 'Mahsulotni yangilash' })
   @ApiResponse({ status: 200, description: 'Mahsulot yangilandi ✅' })
@@ -86,6 +90,8 @@ export class OtherProductController {
   }
 
   @Delete(':id')
+  @Roles('Admin', 'Superadmin')
+
   @ApiParam({ name: 'id', type: 'string' })
   @ApiOperation({ summary: 'Mahsulotni o‘chirish' })
   @ApiResponse({ status: 200, description: 'Mahsulot o‘chirildi 🗑️' })

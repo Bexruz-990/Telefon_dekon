@@ -39,7 +39,7 @@ import {
       // Token ni tekshirish
       try {
         const payload = await this.jwtService.verifyAsync(token, {
-          secret: this.config.get<string>('JWT_SECRET'),
+          secret:" your_super_secret_key",
         });
         request.user = payload;
       } catch {

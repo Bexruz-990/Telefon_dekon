@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Wishlist } from 'src/wishlist/entity/wishlist.entity';
 import { Cart } from 'src/cart/entity/cart-item.entity';
+import { Comment } from 'src/community/entity/comment.entity';
 
 @Entity()
 export class User {
@@ -27,14 +28,15 @@ export class User {
 
   cartItems: Cart[];
 
+  @OneToMany(() => Comment, comment => comment.user) 
+  comments: Comment[];
 
-  
   @Column({ nullable: true })
   refreshToken: string;
 
-@Column({ nullable: true })
-otp: string;
+  @Column({ nullable: true })
+  otp: string;
 
-@Column({ default: false })
-isVerified: boolean;
+  @Column({ default: false })
+  isVerified: boolean;
 }

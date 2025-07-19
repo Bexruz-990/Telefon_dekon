@@ -37,6 +37,27 @@ export class BrandsService {
     };
   }
 
+
+  async getCategoryWithBrandCount(id: number,) {
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+      relations: ['brands'],
+    });
+  
+    if (!category) {
+      throw new NotFoundException('Kategoriya topilmadi');
+    }
+  
+    return {
+      id: category.id,
+      name: category.name,
+      brandCount: category.brands.length,
+      brands: category.brands,
+    };
+  }
+  
+
+
   async remove(id: string) {
     const brand = await this.brandRepo.findOne({ where: { id: Number(id) } });
     if (!brand) throw new NotFoundException('Brand topilmadi');

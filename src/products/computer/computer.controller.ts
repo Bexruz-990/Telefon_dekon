@@ -10,25 +10,17 @@ import {
   import { ComputerProductService } from './computer.service';
   import { CreateComputerDto } from '../dto/create-product.dto';
   import { UpdateComputerDto } from '../dto/update-product.dto';
-  import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+  import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorator';
   
   @ApiTags('products/Computers')
-  @ApiResponse({ status: 201, description: 'Yaratildi ✅' })
-  @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
-  @ApiResponse({ status: 500, description: 'Server xatosi' })
-  @ApiResponse({ status: 404, description: 'Topilmadi' })
-  @ApiResponse({ status: 403, description: 'Ruxsat etilmagan' })
-  @ApiResponse({ status: 401, description: 'Autentifikatsiya xatosi' })
-  @ApiResponse({ status: 409, description: 'Konflikt' })
-  @ApiResponse({ status: 422, description: 'Unprocessable Entity' })
-  @ApiResponse({ status: 503, description: 'Xizmat mavjud emas' })
-  @ApiResponse({ status: 504, description: 'Gateway Timeout' })
-  @ApiResponse({ status: 429, description: 'Too Many Requests' })
+  @ApiBearerAuth('access-token')
   @Controller('products/computers')
   export class ComputerProductController {
     constructor(private readonly service: ComputerProductService) {}
   
     @Post()
+  @Roles('Admin', 'Superadmin')
     @ApiOperation({ summary: 'Yangi kompyuter yaratish' })
     @ApiResponse({ status: 201, description: 'Yaratildi' })
     @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
@@ -95,6 +87,7 @@ import {
     }
   
     @Delete(':id')
+  @Roles('Admin', 'Superadmin')
     @ApiOperation({ summary: 'Kompyuterni o‘chirish' })
     @ApiResponse({ status: 200, description: 'Kompyuter o‘chirildi 🗑️' })
     @ApiResponse({ status: 404, description: 'Kompyuter topilmadi' })

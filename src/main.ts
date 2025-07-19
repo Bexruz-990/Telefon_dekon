@@ -3,12 +3,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RolesGuard } from './auth/guards/roles.guard'; // 👈 path to'g'ri bo'lishi kerak
+import { JwtService } from '@nestjs/jwt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
 
-  // Global Validation Pipe
+  // ✅ Global ValidationPipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,25 +17,30 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  const config = new DocumentBuilder()
-    .setTitle('E-Store API')
-    .setDescription('Category, Product, Auth, Orders va boshqalar uchun API')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'JWT token kiriting',
-        in: 'header',
-      },
-      'access-token',
-    )
-    .build();
+
+  // ✅ Swagger konfiguratsiyasi
+    const config = new DocumentBuilder()
+  .setTitle('E-Store API')
+  .setDescription('Category, Product, Auth, Orders va boshqalar uchun API')
+  .setVersion('1.0')
+  .addBearerAuth({
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT',
+  },
+  'access-token'
+)
+  .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // http://localhost:3000/api
+  SwaggerModule.setup('api', app, document);
+
+
+  const reflector = app.get(Reflector);
+  const jwtService = app.get(JwtService);
+
+  app.useGlobalGuards(new RolesGuard(reflector, jwtService));
+
 
   const PORT = process.env.PORT || 3000;
   await app.listen(PORT, () => {

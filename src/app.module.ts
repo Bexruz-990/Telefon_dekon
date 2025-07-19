@@ -5,12 +5,15 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import {  CartModule} from './cart/cart.module';
 import { WishlistModule } from './wishlist/wishlist.module';
-import { CommunityModule } from './community/community.module';
+import { CommentModule } from './community/community.module';
 import { GameStationModule } from './products/gamestation/gamestation.module';
 import { HeadphonesModule } from './products/headphones/headphones.module';
 import { ComputerModule } from './products/computer/computer.module';
 import { SmartphoneModule } from './products/smartphone/smartphone.module';
 import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [
@@ -40,7 +43,7 @@ import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
     CategoriesModule,
     CartModule,
     WishlistModule,
-    CommunityModule,
+    CommentModule,
     GameStationModule,
     HeadphonesModule,
     ComputerModule,
@@ -48,5 +51,6 @@ import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
     SmartwatchModule,
 
   ],
+
 })
 export class AppModule {}

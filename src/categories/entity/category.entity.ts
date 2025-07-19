@@ -18,4 +18,7 @@ export class Category {
 
   @OneToMany(() => Brand, (brand) => brand.category)
   brands: Brand[];
+
+  @OneToMany(() => Brand, (brand) => brand.category, { cascade: true })
+  brandscount: Brand[];
 }

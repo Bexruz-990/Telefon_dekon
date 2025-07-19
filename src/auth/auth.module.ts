@@ -15,8 +15,6 @@ import { User } from './entity/user.entity' // 👈 bu kerak
     EmailModule,
     PassportModule,
     ConfigModule,
-
-    // 👇 Bu yerda User entitiyni forFeature orqali qo‘shish kerak
     TypeOrmModule.forFeature([User]),
 
     JwtModule.registerAsync({
@@ -30,5 +28,6 @@ import { User } from './entity/user.entity' // 👈 bu kerak
   ],
   providers: [AuthService],
   controllers: [AuthController],
+  exports:[JwtModule]
 })
-export class AuthModule {}
+export class AuthModule { }

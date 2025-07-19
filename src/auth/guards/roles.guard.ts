@@ -1,26 +1,50 @@
 // src/auth/guards/roles.guard.ts
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>("ROLES_KEY", [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    // Role kerak bo'lmasa guardni o'tkazib yubor
     if (!requiredRoles) return true;
 
-    const { user } = context.switchToHttp().getRequest();
-    const hasRole = requiredRoles.some((role) => user.role === role);
-    
-    if (!hasRole) {
-      throw new ForbiddenException(
-        `You need one of these roles: ${requiredRoles.join(', ')}`,
-      );
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers['authorization'];
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new ForbiddenException('Token mavjud emas');
     }
-    return true;
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      request.user = payload;
+
+      if (!requiredRoles.includes(payload.role)) {
+        throw new ForbiddenException('Sizga bu amalga ruxsat yo‘q');
+      }
+
+      return true;
+    } catch (error) {
+      throw new ForbiddenException('Token noto‘g‘ri yoki muddati o‘tgan');
+    }
   }
 }

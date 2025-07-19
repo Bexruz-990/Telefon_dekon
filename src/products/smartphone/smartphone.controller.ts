@@ -7,21 +7,23 @@ import {
   Body,
   Put,
   Delete,
-  ParseUUIDPipe,
-  Query,
+  Query
 } from '@nestjs/common';
 import { SmartphoneProductService } from './smartphone.service';
 import { CreateSmartphoneDto } from '../dto/create-product.dto';
 import { UpdateSmartphoneDto } from '../dto/update-product.dto';
 
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiTags('products/Smartphones')
-@Controller('products/smartphones') // 🔧 TUZATILDI!
+@ApiBearerAuth('access-token')
+@Controller('products/smartphones')
 export class SmartphoneProductController {
   constructor(private readonly service: SmartphoneProductService) {}
 
   @Post()
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Yangi smartfon yaratish' })
   @ApiResponse({ status: 201, description: 'Smartfon yaratildi ✅' })
   @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
@@ -66,11 +68,12 @@ export class SmartphoneProductController {
   @ApiResponse({ status: 503, description: 'Xizmat mavjud emas' })
   @ApiResponse({ status: 504, description: 'Gateway Timeout' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id', ) id: string) {
     return this.service.findOne(id);
   }
 
   @Put(':id')
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Smartfonni yangilash' })
   @ApiResponse({ status: 200, description: 'Smartfon yangilandi ✅' })
   @ApiResponse({ status: 404, description: 'Smartfon topilmadi' })
@@ -84,13 +87,14 @@ export class SmartphoneProductController {
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
 
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id',) id: string,
     @Body() dto: UpdateSmartphoneDto,
   ) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Smartfonni o‘chirish' })
   @ApiResponse({ status: 200, description: 'Smartfon o‘chirildi 🗑️' })
   @ApiResponse({ status: 404, description: 'Smartfon topilmadi' })
@@ -102,7 +106,7 @@ export class SmartphoneProductController {
   @ApiResponse({ status: 503, description: 'Xizmat mavjud emas' })
   @ApiResponse({ status: 504, description: 'Gateway Timeout' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id',) id: string) {
     return this.service.remove(id);
   }
 
@@ -119,7 +123,7 @@ export class SmartphoneProductController {
   @ApiResponse({ status: 504, description: 'Gateway Timeout' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
   sell(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ) id: string,
     @Query('quantity') quantity: number,
   ) {
     return this.service.sell(id, Number(quantity));
@@ -138,7 +142,7 @@ export class SmartphoneProductController {
   @ApiResponse({ status: 504, description: 'Gateway Timeout' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
   restock(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id',) id: string,
     @Query('quantity') quantity: number,
   ) {
     return this.service.restock(id, Number(quantity));

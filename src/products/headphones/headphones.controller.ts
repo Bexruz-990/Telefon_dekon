@@ -8,32 +8,23 @@ import {
     Put,
     Delete,
     Query,
-    ParseUUIDPipe,
+    
   } from '@nestjs/common';
   import { HeadphonesProductService } from './headphones.service';
 
-  import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+  import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CreateHeadphonesDto } from '../dto/create-product.dto';
 import { UpdateHeadphonesDto } from '../dto/update-product.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
   
   @ApiTags('products/Headphones')
   @Controller('products/headphones')
-  @ApiResponse({ status: 201, description: 'Yaratildi ✅' })
-  @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
-  @ApiResponse({ status: 500, description: 'Server xatosi' })
-  @ApiResponse({ status: 404, description: 'Topilmadi' })
-  @ApiResponse({ status: 403, description: 'Ruxsat etilmagan' })
-  @ApiResponse({ status: 401, description: 'Autentifikatsiya xatosi' })
-  @ApiResponse({ status: 409, description: 'Konflikt' })
-  @ApiResponse({ status: 422, description: 'Unprocessable Entity' })
-  @ApiResponse({ status: 503, description: 'Xizmat mavjud emas' })
-  @ApiResponse({ status: 504, description: 'Gateway Timeout' })
-  @ApiResponse({ status: 429, description: 'Too Many Requests' })
-
+@ApiBearerAuth('access-token')
   export class HeadphonesProductController {
     constructor(private readonly service: HeadphonesProductService) {}
   
     @Post()
+  @Roles('Admin', 'Superadmin')
     @ApiResponse({ status: 201, description: 'Naushnik yaratildi ✅' })
     @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
     @ApiResponse({ status: 500, description: 'Server xatosi' })
@@ -79,11 +70,12 @@ import { UpdateHeadphonesDto } from '../dto/update-product.dto';
     @ApiResponse({ status: 504, description: 'Gateway Timeout' })
     @ApiResponse({ status: 429, description: 'Too Many Requests' })
     @ApiOperation({ summary: 'Bitta naushnik olish' })
-    findOne(@Param('id', ParseUUIDPipe) id: string) {
+    findOne(@Param('id', ) id: string) {
       return this.service.findOne(id);
     }
   
     @Put(':id')
+  @Roles('Admin', 'Superadmin')
     @ApiResponse({ status: 200, description: 'Naushnik yangilandi ✅' })
     @ApiResponse({ status: 404, description: 'Naushnik topilmadi' })
     @ApiResponse({ status: 500, description: 'Server xatosi' })
@@ -96,13 +88,14 @@ import { UpdateHeadphonesDto } from '../dto/update-product.dto';
     @ApiResponse({ status: 429, description: 'Too Many Requests' })
     @ApiOperation({ summary: 'Naushnik yangilash' })
     update(
-      @Param('id', ParseUUIDPipe) id: string,
+      @Param('id', ) id: string,
       @Body() dto: UpdateHeadphonesDto,
     ) {
       return this.service.update(id, dto);
     }
   
     @Delete(':id')
+  @Roles('Admin', 'Superadmin')
     @ApiResponse({ status: 200, description: 'Naushnik o‘chirildi 🗑️' })
     @ApiResponse({ status: 404, description: 'Naushnik topilmadi' })
     @ApiResponse({ status: 500, description: 'Server xatosi' })
@@ -114,7 +107,7 @@ import { UpdateHeadphonesDto } from '../dto/update-product.dto';
     @ApiResponse({ status: 504, description: 'Gateway Timeout' })
     @ApiResponse({ status: 429, description: 'Too Many Requests' })
     @ApiOperation({ summary: 'Naushnik o‘chirish' })
-    remove(@Param('id', ParseUUIDPipe) id: string) {
+    remove(@Param('id', ) id: string) {
       return this.service.remove(id);
     }
   
@@ -130,7 +123,7 @@ import { UpdateHeadphonesDto } from '../dto/update-product.dto';
     @ApiResponse({ status: 504, description: 'Gateway Timeout' })
     @ApiResponse({ status: 429, description: 'Too Many Requests' })
     @ApiOperation({ summary: 'Naushnik sotish (amount kamayadi)' })
-    sell(@Param('id', ParseUUIDPipe) id: string, @Query('quantity') quantity: number) {
+    sell(@Param('id', ) id: string, @Query('quantity') quantity: number) {
       return this.service.sell(id, Number(quantity));
     }
   
@@ -146,7 +139,7 @@ import { UpdateHeadphonesDto } from '../dto/update-product.dto';
     @ApiResponse({ status: 504, description: 'Gateway Timeout' })
     @ApiResponse({ status: 429, description: 'Too Many Requests' })
     @ApiOperation({ summary: 'Naushnik omborga qo‘shish (amount oshadi)' })
-    restock(@Param('id', ParseUUIDPipe) id: string, @Query('quantity') quantity: number) {
+    restock(@Param('id', ) id: string, @Query('quantity') quantity: number) {
       return this.service.restock(id, Number(quantity));
     }
   }

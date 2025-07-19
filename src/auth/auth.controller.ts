@@ -9,18 +9,19 @@ import {
   Put,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifyOtpDto } from './dto/verify.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from './decorators/roles.decorator';
 
 
 @Controller('auth')
+@ApiBearerAuth('access-token')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiOperation({ summary: 'Registratsiya qilish' })
@@ -60,9 +61,10 @@ export class AuthController {
   logout(@Res() res: Response) {
     return this.authService.logout(res);
   }
-
-
+  
+  
   @ApiOperation({ summary: 'Barcha foydalanuvchilarni olish' })
+  @Roles('Admin', 'Superadmin')
   @ApiResponse({ status: 200, description: 'Foydalanuvchilar ro‘yxati' })
   @Get()
   @ApiOperation({ summary: 'Barcha foydalanuvchilar' })
@@ -70,7 +72,7 @@ export class AuthController {
     return this.authService.findAll();
   }
 
-
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'ID orqali foydalanuvchini olish' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi topildi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
@@ -81,7 +83,7 @@ export class AuthController {
   }
 
 
-
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi yangilandi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
@@ -92,7 +94,7 @@ export class AuthController {
   }
 
 
-
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Foydalanuvchini o‘chirish' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi o‘chirildi 🗑️' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })

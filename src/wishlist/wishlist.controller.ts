@@ -2,9 +2,10 @@
 import { Controller, Post, Body, Param, Get, Delete, Patch } from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Wishlist')
+@ApiBearerAuth('access-token')
 @Controller('wishlist')
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}

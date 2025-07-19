@@ -25,6 +25,25 @@ export class CategoriesService {
     };
   }
 
+  async findOneWithBrandCount(id: number) {
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+      relations: ['brands'],
+    });
+  
+    if (!category) {
+      throw new NotFoundException('Kategoriya topilmadi');
+    }
+  
+    const brandCount = category.brands.length;
+  
+    return {
+      brandCount,
+      ...category,
+      
+    };
+  }
+
   async remove(id: number) {
     const category = await this.categoryRepo.findOne({ where: { id } });
     if (!category) throw new NotFoundException('Category topilmadi');
