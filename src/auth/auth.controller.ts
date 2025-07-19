@@ -18,7 +18,7 @@ import { Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifyOtpDto } from './dto/verify.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from './strategy/jwt-auth.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -56,7 +56,6 @@ export class AuthController {
   @ApiResponse({ status: 503, description: 'Xizmat mavjud emas' })
   @ApiResponse({ status: 504, description: 'Gateway Timeout' })
   @ApiResponse({ status: 429, description: 'Too Many Requests' })
-  @UseGuards(JwtAuthGuard)
   @Post('logout')
   logout(@Res() res: Response) {
     return this.authService.logout(res);
@@ -65,7 +64,6 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Barcha foydalanuvchilarni olish' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchilar ro‘yxati' })
-  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Barcha foydalanuvchilar' })
   findAll() {
@@ -76,7 +74,6 @@ export class AuthController {
   @ApiOperation({ summary: 'ID orqali foydalanuvchini olish' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi topildi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'ID orqali foydalanuvchini olish' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -88,7 +85,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi yangilandi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
-  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateUserDto) {
@@ -100,7 +96,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Foydalanuvchini o‘chirish' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi o‘chirildi 🗑️' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Foydalanuvchini o‘chirish' })
   remove(@Param('id', ParseUUIDPipe) id: string) {

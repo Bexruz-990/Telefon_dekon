@@ -2,9 +2,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { JwtAuthGuard } from './auth/strategy/jwt-auth.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { RolesGuard } from './auth/strategy/guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,13 +16,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  // 🌐 Global JWT Auth Guard (foydalanuvchi token bilan kirsin)
-  const reflecto = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflecto));
-  app.useGlobalGuards(new RolesGuard(reflecto));
-
-  // Swagger konfiguratsiyasi
   const config = new DocumentBuilder()
     .setTitle('E-Store API')
     .setDescription('Category, Product, Auth, Orders va boshqalar uchun API')

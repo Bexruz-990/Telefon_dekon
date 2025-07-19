@@ -3,7 +3,6 @@ import { Controller, Post, Body, Get, Delete, Param, UseGuards } from '@nestjs/c
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/strategy/jwt-auth.guard';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -12,7 +11,6 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Yangi category yaratish' })
   @ApiResponse({ status: 201, description: 'Category muvaffaqiyatli yaratildi ✅' })
   @ApiResponse({ status: 400, description: 'Noto‘g‘ri ma’lumotlar' })
-  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create new category' })
   create(@Body() dto: CreateCategoryDto) {
@@ -32,7 +30,6 @@ export class CategoriesController {
   @ApiOperation({ summary: 'ID orqali kategoriyani o‘chirish' })
   @ApiResponse({ status: 200, description: 'Kategoriya o‘chirildi 🗑️' })
   @ApiResponse({ status: 404, description: 'Kategoriya topilmadi' })
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete category by ID' })
   remove(@Param('id') id: number) {

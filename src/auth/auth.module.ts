@@ -7,7 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './strategy/jwt.strategy';
 import { EmailModule } from './email/email.module';
 import { User } from './entity/user.entity' // 👈 bu kerak
 
@@ -29,7 +28,7 @@ import { User } from './entity/user.entity' // 👈 bu kerak
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}
