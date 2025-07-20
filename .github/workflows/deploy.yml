@@ -1,3 +1,39 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Copy build files via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          port: 22
+          source: "dist/**,package.json,package-lock.json,.env"
+          target: "/var/www/cyber-store.uz"
+
       - name: SSH and deploy
         uses: appleboy/ssh-action@master
         with:
@@ -12,20 +48,6 @@
             fi
 
             cd /var/www/cyber-store.uz
-
-            echo "Yaratilmoqda .env fayl..."
-            cat <<EOF > .env
-            JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}
-            PORT=${{ secrets.ENV_PORT }}
-            DB_TYPE=${{ secrets.ENV_DB_TYPE }}
-            DB_HOST=${{ secrets.ENV_DB_HOST }}
-            DB_PORT=${{ secrets.ENV_DB_PORT }}
-            DB_USERNAME=${{ secrets.ENV_DB_USERNAME }}
-            DB_PASSWORD=${{ secrets.ENV_DB_PASSWORD }}
-            DB_NAME=${{ secrets.ENV_DB_NAME }}
-            GMAIL_USER=${{ secrets.ENV_GMAIL_USER }}
-            GMAIL_PASS=${{ secrets.ENV_GMAIL_PASS }}
-            EOF
 
             if ! command -v npm &> /dev/null; then
               echo "❌ npm topilmadi."
