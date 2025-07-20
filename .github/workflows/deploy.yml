@@ -1,4 +1,4 @@
-name: Deploy to VPS
+ name: Deploy to VPS
 
 on:
   push:
@@ -10,24 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH and deploy from Git on VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_KEY }}
-          port: 22
-          script: |
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Deploy to server
+        env:
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USERNAME }}
+          APP_DIR: /ci_cd
+          PORT: ${{ secrets.PORT }}
+        run: |
+          ssh $USER@$HOST << EOF
             set -e
 
-            APP_DIR="/var/www/cyber-store.uz"
-            REPO_URL="https://github.com/Bexruz-990/Telefon_dekon.git"
-            PORT=3000  # yoki o'zingizning portingiz
-
-            # Clone repo if not exists
             if [ ! -d "$APP_DIR" ]; then
               mkdir -p "$APP_DIR"
-              git clone "$REPO_URL" "$APP_DIR"
+              git clone https://github.com/Bexruz-990/Telefon_dekon.git "$APP_DIR"
             fi
 
             cd "$APP_DIR"
@@ -37,21 +43,12 @@ jobs:
               exit 1
             fi
 
-            # Pull latest code
-            git reset --hard
             git pull origin main
 
-            # Create .env with port if needed
             echo "PORT=$PORT" > .env
-
-            # Setup environment (optional for nvm)
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-
             npm install
             npm run build
 
-            # Restart or start app
             if pm2 list | grep -q "ci_cd_app"; then
               pm2 restart ci_cd_app
             else
@@ -59,3 +56,4 @@ jobs:
             fi
 
             pm2 save
+          EOF
