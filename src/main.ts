@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RolesGuard } from './auth/guards/roles.guard'; // 👈 path to'g'ri bo'lishi kerak
 import { JwtService } from '@nestjs/jwt';
+import * as crypto from 'crypto';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
