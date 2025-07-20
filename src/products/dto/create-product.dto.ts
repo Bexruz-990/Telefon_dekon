@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString, IsUUID, IsNumber, IsUrl, IsBoolean, IsArray, IsOptional, isNumber } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+
 export class CreateComputerDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -262,7 +263,6 @@ export class CreateGameStationDto {
 
 
 
-// src/products/dto/create-other-product.dto.ts
 
 export class CreateOtherProductDto {
   @ApiProperty({ example: 'Printer HP LaserJet Pro' })
@@ -295,4 +295,30 @@ export class CreateOtherProductDto {
   @ApiProperty({ example: 'uuid-category-id' })
   @IsString()
   categoryId: string;
+}
+
+
+export class CommentUserDto {
+  @ApiProperty({ example: 'Zo‘r telefon' })
+  text: string;
+
+  @ApiProperty({ example: 'Behruz' })
+  user: string;
+}
+
+export class GetProductWithCommentsDto {
+  @ApiProperty({ example: 1 })
+  id: number;
+
+  @ApiProperty({ example: 'iPhone 16 Pro Max' })
+  name: string;
+
+  @ApiProperty({ example: 'iPhone' })
+  brand: string;
+
+  @ApiProperty({ example: 'Smartphone' })
+  category: string;
+
+  @ApiProperty({ type: [CommentUserDto] })
+  comments: CommentUserDto[];
 }

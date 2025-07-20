@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Brand } from 'src/categories/brands/entities/brand.entity';
 import { Category } from 'src/categories/entity/category.entity';
@@ -42,11 +43,13 @@ export class ComputerProduct {
   @Column()
   os: string;
 
-@ManyToOne(() => Category, { eager: true })
-category: Category;
+  @ManyToOne(() => Category, { eager: true })
+  category: Category;
 
-@ManyToOne(() => Brand, { eager: true })
-brand: Brand;
+  @ManyToOne(() => Brand, { eager: true })
+  brand: Brand;
+
+
 
 }
 
@@ -94,11 +97,11 @@ export class SmartphoneProduct {
   @Column()
   imageUrl: string;
 
-@ManyToOne(() => Category, { eager: true })
-category: Category;
+  @ManyToOne(() => Brand, { eager: false })
+  brand: Brand;
 
-@ManyToOne(() => Brand, { eager: true })
-brand: Brand;
+  @ManyToOne(() => Category, { eager: false })
+  category: Category;
 
 }
 
@@ -117,7 +120,7 @@ export class HeadphonesProduct {
   price: number;
 
   @Column()
-  type: string; 
+  type: string;
 
   @Column()
   battery: string;
@@ -137,11 +140,11 @@ export class HeadphonesProduct {
   @Column()
   imageUrl: string;
 
-@ManyToOne(() => Category, { eager: true })
-category: Category;
+  @ManyToOne(() => Category, { eager: true })
+  category: Category;
 
-@ManyToOne(() => Brand, { eager: true })
-brand: Brand;
+  @ManyToOne(() => Brand, { eager: true })
+  brand: Brand;
 
 }
 
@@ -182,10 +185,10 @@ export class SmartwatchProduct {
 
   @ManyToOne(() => Category, { eager: true })
   category: Category;
-  
+
   @ManyToOne(() => Brand, { eager: true })
   brand: Brand;
-  
+
 }
 
 
@@ -198,7 +201,7 @@ export class GameStationProduct {
 
   @Column()
   name: string;
-  
+
 
   @Column('decimal')
   price: number;
@@ -224,11 +227,11 @@ export class GameStationProduct {
   @Column()
   imageUrl: string;
 
-@ManyToOne(() => Category, { eager: true })
-category: Category;
+  @ManyToOne(() => Category, { eager: true })
+  category: Category;
 
-@ManyToOne(() => Brand, { eager: true })
-brand: Brand;
+  @ManyToOne(() => Brand, { eager: true })
+  brand: Brand;
 
 }
 

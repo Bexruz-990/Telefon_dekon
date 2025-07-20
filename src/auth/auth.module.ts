@@ -2,32 +2,27 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { EmailModule } from './email/email.module';
-import { User } from './entity/user.entity' // 👈 bu kerak
+import { User } from './entity/user.entity';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
     EmailModule,
     PassportModule,
-    ConfigModule,
     TypeOrmModule.forFeature([User]),
-
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        secret: "mysecretkey",
-        signOptions: { expiresIn: '1h' },
-      }),
-      inject: [ConfigService],
+    JwtModule.register({
+      secret: 'mysecretkey',
+      signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard],
   controllers: [AuthController],
-  exports:[JwtModule]
+  exports: [JwtModule,JwtAuthGuard],
 })
-export class AuthModule { }
+export class AuthModule {}

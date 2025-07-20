@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import {  CartModule} from './cart/cart.module';
 import { WishlistModule } from './wishlist/wishlist.module';
-// import { CommentModule } from './community/community.module';
+import { CommentModule } from './community/community.module';
 import { GameStationModule } from './products/gamestation/gamestation.module';
 import { HeadphonesModule } from './products/headphones/headphones.module';
 import { ComputerModule } from './products/computer/computer.module';
@@ -44,7 +44,7 @@ import { OtherProductModule } from './products/others/other-product.module';
     CategoriesModule,
     CartModule,
     WishlistModule,
-    // CommentModule,
+    CommentModule,
     GameStationModule,
     HeadphonesModule,
     ComputerModule,

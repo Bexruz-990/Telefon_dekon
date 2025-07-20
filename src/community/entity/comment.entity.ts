@@ -4,6 +4,7 @@ import {
     Column,
     ManyToOne,
     CreateDateColumn,
+    JoinColumn,
 } from 'typeorm';
 import { User } from 'src/auth/entity/user.entity';
 
@@ -13,10 +14,10 @@ export class Comment {
     id: string;
 
     @Column()
-    productId: string; 
+    productId: number;
 
     @Column()
-    productType: string; 
+    productType: string;
 
     @Column()
     text: string;
@@ -24,4 +25,10 @@ export class Comment {
     @CreateDateColumn()
     createdAt: Date;
 
+    @ManyToOne(() => User, user => user.comments, { eager: false })
+    @JoinColumn({ name: 'userId' })
+    user: User;
+    
+    @Column()
+    userId: string;
 }

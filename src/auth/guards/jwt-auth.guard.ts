@@ -39,8 +39,9 @@ import {
       // Token ni tekshirish
       try {
         const payload = await this.jwtService.verifyAsync(token, {
-          secret:" your_super_secret_key",
+          secret: this.config.get<string>('JWT_SECRET'), // ✅ .env dan o‘qiydi
         });
+        
         console.log('Decoded JWT payload:', payload);
         request.user = payload;
       } catch {

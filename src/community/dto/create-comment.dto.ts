@@ -1,4 +1,4 @@
-import { IsUUID, IsString } from 'class-validator';
+import { IsUUID, IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
@@ -6,14 +6,42 @@ export class CreateCommentDto {
   @IsString()
   productType: string;
 
-  @ApiProperty({ example: 'b7c6a9d3-f221-4ab3-a3a5-9f4737d7aabc' })
+  @ApiProperty({ example: 123 }) // number bo‘lsa shunday qoldiring
+  @IsNumber()
   productId: number;
 
   @ApiProperty({ example: 'Bu mahsulot juda yaxshi!' })
   @IsString()
   text: string;
 
-  @ApiProperty({ example: 'e4f3c8f1-882b-4e36-b3f3-1234567890ab' })
-  @IsUUID()
-  userId: never;
+
+}
+
+
+export class CommentUserDto {
+  @ApiProperty()
+  text: string;
+
+  @ApiProperty()
+  user: string;
+}
+
+
+
+
+export class GetProductWithCommentsDto {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  brand: string;
+
+  @ApiProperty()
+  category: string;
+
+  @ApiProperty({ type: [CommentUserDto] })
+  comments: CommentUserDto[];
 }
