@@ -43,6 +43,7 @@ async function bootstrap() {
 
   app.useGlobalGuards(new RolesGuard(reflector, jwtService));
 
+console.log("salom");
 
   const PORT = process.env.PORT || 3000;
   await app.listen(PORT, '0.0.0.0',() => {
