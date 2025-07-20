@@ -41,6 +41,7 @@ import {
         const payload = await this.jwtService.verifyAsync(token, {
           secret:" your_super_secret_key",
         });
+        console.log('Decoded JWT payload:', payload);
         request.user = payload;
       } catch {
         throw new UnauthorizedException('Invalid token');

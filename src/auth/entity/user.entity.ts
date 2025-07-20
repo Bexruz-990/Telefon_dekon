@@ -28,8 +28,8 @@ export class User {
 
   cartItems: Cart[];
 
-  @OneToMany(() => Comment, comment => comment.user) 
-  comments: Comment[];
+  // @OneToMany(() => Comment, comment => comment.user) 
+  // comments: Comment[];
 
   @Column({ nullable: true })
   refreshToken: string;

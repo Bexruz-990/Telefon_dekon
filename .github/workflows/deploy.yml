@@ -1,0 +1,42 @@
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          port: 22
+          script: |
+            if [ -s "$HOME/.nvm/nvm.sh" ]; then
+              export NVM_DIR="$HOME/.nvm"
+              source "$NVM_DIR/nvm.sh"
+            fi
+
+            cd /var/www/cyber-store.uz
+
+            echo "Yaratilmoqda .env fayl..."
+            cat <<EOF > .env
+            JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}
+            PORT=${{ secrets.ENV_PORT }}
+            DB_TYPE=${{ secrets.ENV_DB_TYPE }}
+            DB_HOST=${{ secrets.ENV_DB_HOST }}
+            DB_PORT=${{ secrets.ENV_DB_PORT }}
+            DB_USERNAME=${{ secrets.ENV_DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.ENV_DB_PASSWORD }}
+            DB_NAME=${{ secrets.ENV_DB_NAME }}
+            GMAIL_USER=${{ secrets.ENV_GMAIL_USER }}
+            GMAIL_PASS=${{ secrets.ENV_GMAIL_PASS }}
+            EOF
+
+            if ! command -v npm &> /dev/null; then
+              echo "❌ npm topilmadi."
+              exit 1
+            fi
+
+            if ! command -v pm2 &> /dev/null; then
+              echo "⚠️ pm2 o‘rnatilmoqda..."
+              npm install -g pm2
+            fi
+
+            npm install --omit=dev
+
+            pm2 start dist/main.js --name cyber-store || pm2 restart cyber-store
