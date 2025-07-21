@@ -42,7 +42,7 @@ export class CommentController {
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard) // 👈 faqat adminlar kiradi
-  @Roles('admin', 'superadmin')
+  @Roles('admin', 'Superadmin')
   @ApiOperation({ summary: 'Mahsulotga yozilgan izohlarni olish' })
   @ApiParam({ name: 'productId', required: true, description: 'Mahsulot IDsi' })
   @ApiParam({ name: 'productType', required: true, description: 'Mahsulot turi' })
@@ -56,7 +56,7 @@ export class CommentController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'superadmin')
+  @Roles('admin', 'Superadmin')
   @ApiOperation({ summary: 'Izohni o‘chirish' })
   @ApiResponse({ status: 200, description: 'Izoh o‘chirildi 🗑️' })
   remove(@Param('id') id: string) {

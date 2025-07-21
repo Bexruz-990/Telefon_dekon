@@ -15,7 +15,7 @@ export class Cart {
   id: string;
 
   @Column()
-  productId: string; // Mahsulotning IDsi
+  productId: number 
 
   @Column()
   productType: string; // Mahsulot turi (smartphone, computer, headphones...)

@@ -17,19 +17,21 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VerifyOtpDto } from './dto/verify.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from './decorators/roles.decorator';
+import { Public } from './decorators/public.decarator';
 
 
 @Controller('auth')
-@ApiBearerAuth('access-token')
+// @ApiBearerAuth('access-token')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiOperation({ summary: 'Registratsiya qilish' })
+  @Public()
   @ApiResponse({ status: 200, description: 'Registratsiya muvaffaqiyatli tasdiqlandi' })
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
-
+  @Public()
   @Post('verify')
   @ApiOperation({ summary: 'OTP kodni tasdiqlash' })
   @ApiResponse({ status: 200, description: 'OTP muvaffaqiyatli tasdiqlandi' })
@@ -37,7 +39,7 @@ export class AuthController {
   verify(@Body() verifyOtpDto: VerifyOtpDto) {
     return this.authService.verifyOtp(verifyOtpDto.email, verifyOtpDto.otp);
   }
-  
+  @Public()
   @Post('login')
   @ApiOperation({ summary: 'Foydalanuvchi tizimga kirishi' })
   @ApiResponse({ status: 200, description: 'Muvaffaqiyatli kirish' })
@@ -47,7 +49,7 @@ export class AuthController {
     const result = await this.authService.login(loginDto, res);
     return res.status(HttpStatus.OK).json(result);
   }
-
+  @Public()
   @ApiOperation({ summary: 'Foydalanuvchini tizimdan chiqarish' })
   @ApiResponse({ status: 200, description: 'Logout muvaffaqiyatli ✅' })
   @ApiResponse({ status: 401, description: 'Autentifikatsiya xatosi' })
@@ -63,7 +65,7 @@ export class AuthController {
   
   
   @ApiOperation({ summary: 'Barcha foydalanuvchilarni olish' })
-  @Roles('Admin', 'Superadmin')
+  @Roles("user",'Admin', 'Superadmin')
   @ApiResponse({ status: 200, description: 'Foydalanuvchilar ro‘yxati' })
   @Get()
   @ApiOperation({ summary: 'Barcha foydalanuvchilar' })
@@ -82,7 +84,7 @@ export class AuthController {
   }
 
 
-  @Roles('Admin', 'Superadmin')
+  @Roles("user",'Admin', 'Superadmin')
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi yangilandi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })

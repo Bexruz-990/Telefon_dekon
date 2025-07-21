@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/add-item.dto';
@@ -24,9 +25,10 @@ export class CartController {
   @ApiResponse({ status: 201, description: 'Mahsulot savatga qo‘shildi ✅' })
   @Post()
   @ApiOperation({ summary: 'Mahsulotni savatga qo‘shish' })
-  addToCart(@Body() dto: CreateCartDto) {
-    return this.cartService.addToCart(dto);
-  }
+async addToCart(@Body() dto: CreateCartDto, @Req() req: any) {
+  const userId = req.user.id; // yoki req.user['id']
+  return this.cartService.addToCart(dto, userId);
+}
 
   @ApiOperation({ summary: 'Foydalanuvchi savatidagi mahsulotlarni ko‘rish' })
   @ApiResponse({ status: 200, description: 'Savatdagi mahsulotlar ro‘yxati' })

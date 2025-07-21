@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
-  app.useGlobalGuards(app.get(JwtAuthGuard));
+  // app.useGlobalGuards(app.get(JwtAuthGuard));
 
   app.useGlobalPipes(
     new ValidationPipe({

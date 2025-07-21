@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Brand } from 'src/categories/brands/entities/brand.entity';
 import { Category } from 'src/categories/entity/category.entity';
@@ -100,8 +101,12 @@ export class SmartphoneProduct {
   @ManyToOne(() => Brand, { eager: false })
   brand: Brand;
 
-  @ManyToOne(() => Category, { eager: false })
-  category: Category;
+@ManyToOne(() => Category, (category) => category.smartphones, {
+  onDelete: 'CASCADE', // yoki SET NULL
+  nullable: true
+})
+@JoinColumn({ name: 'categoryId' })
+category: Category;
 
 }
 

@@ -54,54 +54,55 @@ export class CartService {
         throw new BadRequestException('Noto‘g‘ri product turi');
     }
   }
+// cart.service.ts ichidagi addToCart metodi
+async addToCart(dto: CreateCartDto, userId: string) {
+  const user = await this.userRepo.findOne({ where: ({ id: userId }) });
+  if (!user) throw new NotFoundException('Foydalanuvchi topilmadi');
 
-  async addToCart(dto: CreateCartDto) {
-    const user = await this.userRepo.findOne({ where: { id: dto.userId } });
-    if (!user) throw new NotFoundException('Foydalanuvchi topilmadi');
+  const product = await this.getProductByType(dto.productType, String(dto.productId));
+  if (!product) throw new NotFoundException('Mahsulot topilmadi');
 
-    const product = await this.getProductByType(dto.productType, dto.productId);
-    if (!product) throw new NotFoundException('Mahsulot topilmadi');
-
-    if (dto.quantity > product.amount) {
-      throw new BadRequestException(`Omborda faqat ${product.amount} ta mavjud`);
-    }
-
-    let item = await this.cartRepo.findOne({
-      where: {
-        user: { id: dto.userId },
-        productId: dto.productId,
-        productType: dto.productType,
-      },
-      relations: ['user'],
-    });
-
-    if (item) {
-      const newQuantity = item.quantity + dto.quantity;
-      if (newQuantity > product.amount) {
-        throw new BadRequestException('Zaxiradan ortiq qo‘shib bo‘lmaydi');
-      }
-
-      item.quantity = newQuantity;
-      item.totalPrice = item.quantity * Number(item.price);
-    } else {
-      item = this.cartRepo.create({
-        user,
-        productId: dto.productId,
-        productType: dto.productType,
-        name: dto.name,
-        price: dto.price,
-        quantity: dto.quantity,
-        totalPrice: dto.price * dto.quantity,
-        imageUrl: dto.imageUrl,
-      });
-    }
-
-    const saved = await this.cartRepo.save(item);
-    return {
-      message: 'Savat yangilandi yoki qo‘shildi ✅',
-      item: saved,
-    };
+  if (dto.quantity > product.amount) {
+    throw new BadRequestException(`Omborda faqat ${product.amount} ta mavjud`);
   }
+
+  let item = await this.cartRepo.findOne({
+    where: {
+      user: { id: userId },
+      productId: dto.productId,
+      productType: dto.productType,
+    },
+    relations: ['user'],
+  });
+
+  if (item) {
+    const newQuantity = item.quantity + dto.quantity;
+    if (newQuantity > product.amount) {
+      throw new BadRequestException('Zaxiradan ortiq qo‘shib bo‘lmaydi');
+    }
+
+    item.quantity = newQuantity;
+    item.totalPrice = item.quantity * Number(item.price);
+  } else {
+    item = this.cartRepo.create({
+      user,
+      productId: dto.productId,
+      productType: dto.productType,
+      name: dto.name,
+      price: dto.price,
+      quantity: dto.quantity,
+      totalPrice: dto.price * dto.quantity,
+      imageUrl: dto.imageUrl,
+    });
+  }
+
+  const saved = await this.cartRepo.save(item);
+  return {
+    message: 'Savat yangilandi yoki qo‘shildi ✅',
+    item: saved,
+  };
+}
+
 
   async getUserCart(userId: string) {
     const items = await this.cartRepo.find({
@@ -121,7 +122,7 @@ export class CartService {
     const item = await this.cartRepo.findOne({ where: { id: cartId } });
     if (!item) throw new NotFoundException('Savat elementi topilmadi');
 
-    const product = await this.getProductByType(item.productType, item.productId);
+    const product = await this.getProductByType(item.productType, String(item.productId));
     if (!product) throw new NotFoundException('Mahsulot topilmadi');
 
     if (item.quantity + 1 > product.amount) {
