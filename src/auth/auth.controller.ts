@@ -69,6 +69,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Foydalanuvchilar ro‘yxati' })
   @Get()
   @ApiOperation({ summary: 'Barcha foydalanuvchilar' })
+  @ApiBearerAuth()
   findAll() {
     return this.authService.findAll();
   }
