@@ -43,9 +43,9 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(reflector, jwtService));
 
   const PORT = process.env.PORT || 3000;
-  await app.listen(PORT, () =>{
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  console.log(`📚 Swagger UI: http://localhost:${PORT}/api`);
+  await app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`📚 Swagger UI: http://localhost:${PORT}/api`);
   });
 
 }
