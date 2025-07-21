@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 const cookieParser = require('cookie-parser');
 
 
@@ -44,8 +43,10 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(reflector, jwtService));
 
   const PORT = process.env.PORT || 3000;
-  await app.listen(PORT, '0.0.0.0');
+  await app.listen(PORT, () =>{
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
   console.log(`📚 Swagger UI: http://localhost:${PORT}/api`);
+  });
+
 }
 bootstrap();

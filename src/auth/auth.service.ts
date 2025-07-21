@@ -15,7 +15,6 @@ import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
-import { UpdateBrandDto } from 'src/categories/brands/dto/update-brand.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
