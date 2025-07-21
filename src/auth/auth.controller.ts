@@ -65,7 +65,7 @@ export class AuthController {
   
   
   @ApiOperation({ summary: 'Barcha foydalanuvchilarni olish' })
-  @Roles("user",'Admin', 'Superadmin')
+  @Roles('Admin', 'Superadmin')
   @ApiResponse({ status: 200, description: 'Foydalanuvchilar ro‘yxati' })
   @Get()
   @ApiOperation({ summary: 'Barcha foydalanuvchilar' })
@@ -84,7 +84,7 @@ export class AuthController {
   }
 
 
-  @Roles("user",'Admin', 'Superadmin')
+  @Roles('Admin', 'Superadmin')
   @ApiOperation({ summary: 'Foydalanuvchini yangilash' })
   @ApiResponse({ status: 200, description: 'Foydalanuvchi yangilandi ✅' })
   @ApiResponse({ status: 404, description: 'Foydalanuvchi topilmadi' })

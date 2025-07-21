@@ -5,14 +5,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtService } from '@nestjs/jwt';
 const cookieParser = require('cookie-parser');
+import * as crypto from 'crypto';
+
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
-  // app.useGlobalGuards(app.get(JwtAuthGuard));
-
+(global as any).crypto = crypto;
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

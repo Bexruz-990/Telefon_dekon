@@ -12,8 +12,7 @@ import { ComputerModule } from './products/computer/computer.module';
 import { SmartphoneModule } from './products/smartphone/smartphone.module';
 import { SmartwatchModule } from './products/smartwatch/smartwatch.module';
 import { OtherProductModule } from './products/others/other-product.module';
-import * as crypto from 'crypto';
-(global as any).crypto = crypto;
+
 
 @Module({
   imports: [
