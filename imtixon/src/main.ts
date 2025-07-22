@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import * as express from 'express';
 import { join } from 'path';
 const cookieParser = require('cookie-parser');
-const crypto = require('crypto');
 
 
 
@@ -16,9 +15,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use('/.well-known', express.static(join(__dirname, '..', '.well-known')));
 
-  if (!(global as any).crypto) {
-  (global as any).crypto = require('crypto');
-}
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
