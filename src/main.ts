@@ -4,6 +4,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtService } from '@nestjs/jwt';
+import * as express from 'express';
+import { join } from 'path';
 const cookieParser = require('cookie-parser');
 
 
@@ -11,6 +13,7 @@ const cookieParser = require('cookie-parser');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use('/.well-known', express.static(join(__dirname, '..', '.well-known')));
 
   app.use(cookieParser());
   app.useGlobalPipes(
