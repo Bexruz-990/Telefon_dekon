@@ -21,7 +21,8 @@ import { Public } from './decorators/public.decarator';
 
 
 @Controller('auth')
-@ApiBearerAuth('access-token')
+@ApiBearerAuth('access-token') 
+
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiOperation({ summary: 'Registratsiya qilish' })
